@@ -1,0 +1,44 @@
+{
+  "name": "@eliware/elera-example",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Runnable Elera client example for routing, telemetry, and graceful lifecycle testing",
+  "keywords": [
+    "eliware",
+    "elera",
+    "mysql",
+    "mariadb",
+    "routing",
+    "telemetry",
+    "example"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eliware/elera-example.git"
+  },
+  "homepage": "https://github.com/eliware/elera-example#readme",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
+  "scripts": {
+    "pretest": "npm run build",
+    "test": "eliware-test",
+    "lint": "eliware-test --lint",
+    "build": "tsc --project tsconfig.json",
+    "check": "tsc --noEmit --project tsconfig.json",
+    "pack": "npm pack --dry-run",
+    "audit": "npm audit --omit=dev --audit-level=moderate"
+  },
+  "dependencies": {
+    "@eliware/common": "2.0.0",
+    "@eliware/elera-lib": "0.1.11",
+    "@eliware/snowflake": "2.0.0"
+  },
+  "devDependencies": {
+    "@eliware/test": "^2.0.0",
+    "@types/node": "^26.4.0",
+    "typescript": "^7.0.2"
+  }
+}
