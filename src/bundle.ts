@@ -14,7 +14,7 @@ export function createBundleLoader({ endpoint, token, fetchImpl = defaultBundleF
       });
       if (response.ok) {
         const body = await response.json() as { data?: unknown } & Record<string, unknown>;
-        return (body.data ?? body) as RoutingBundle;
+        return (body.data ?? body) as Record<string, unknown>;
       }
       if (response.status !== 401 && response.status !== 404) throw new Error(`routing bundle request failed: ${response.status}`);
       await delay(1000);
@@ -22,4 +22,3 @@ export function createBundleLoader({ endpoint, token, fetchImpl = defaultBundleF
     throw new Error('routing bundle request failed after metadata convergence retries');
   };
 }
-import type { RoutingBundle } from '@eliware/elera-lib';

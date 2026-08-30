@@ -1,12 +1,8 @@
 import { expect, jest, test } from '@jest/globals';
 import { runExample } from '../dist/src/runtime.js';
 
-test('starts the observation client with endpoint and token and shuts down cleanly', async () => {
-  const emit = jest.fn();
-  const close = jest.fn();
-  const stream = { close };
-  const db = {
-    attachRoutingStream: jest.fn(async () => undefined),
+function fakeDb() {
+  return {
     close: jest.fn(async () => undefined),
     bundle: () => ({ bundleVersion: 'v1', writer: { host: 'writer' }, routes: { primary: [], balanced: [] } }),
     classify: (sql) => sql.startsWith('SELECT') ? 'read' : 'write',
@@ -17,55 +13,39 @@ test('starts the observation client with endpoint and token and shuts down clean
       .mockResolvedValueOnce([[{ Variable_name: 'wsrep_local_state_comment', Value: 'Synced' }, { Variable_name: 'wsrep_cluster_status', Value: 'Primary' }]])
       .mockResolvedValueOnce([{}])
       .mockResolvedValueOnce([{ insertId: 1 }])
-      .mockResolvedValueOnce([[{ writer_node: 'writer' }]]),
+      .mockResolvedValueOnce([[{ writer_node: 'writer' }]])
+      .mockResolvedValue([[]]),
   };
+}
+
+test('starts the client with endpoint and token and shuts down cleanly', async () => {
+  const emit = jest.fn();
+  const db = fakeDb();
   const shutdown = await runExample(
     { endpoint: 'http://router', token: 'application-token', debug: false },
-    {
-      emit,
-      dependencies: {
-        fetchImpl: async () => ({ ok: true, async json() { return { data: { database: 'sample_app', credentials: { username: 'u', password: 'p' }, routes: { primary: [{ host: 'writer', port: 3306 }], balanced: [{ host: 'reader', port: 3306 }] }, bundleVersion: 'v1' } }; } }),
-        createDb: async () => db,
-        createRoutingStream: () => stream,
-      },
-    },
+    { emit, dependencies: { createDb: async () => db } },
   );
   await shutdown();
-  expect(db.attachRoutingStream).toHaveBeenCalledWith(stream);
+  await shutdown();
   expect(db.close).toHaveBeenCalled();
-  expect(close).toHaveBeenCalled();
   expect(emit).toHaveBeenCalledWith(expect.objectContaining({ event: 'sql.probe', generatedId: 1 }));
 });
 
-test('uses defaults, reports routing errors, and rejects unusable bundles', async () => {
+test('schedules recurring probes while running', async () => {
   jest.useFakeTimers();
-  await expect(runExample({ endpoint: 'http://router', token: 'token' }, {
-    dependencies: {
-      fetchImpl: async () => ({ ok: true, async json() { return { data: { database: 'db', credentials: { username: 'u', password: 'p' }, routes: { primary: [] } } }; } }),
-    },
-  })).rejects.toThrow('usable primary connection');
-
-  const emit = jest.fn();
-  const stream = { close: jest.fn() };
-  const db = {
-    attachRoutingStream: jest.fn(async () => undefined), close: jest.fn(async () => undefined),
-    bundle: () => ({ bundleVersion: 'v1', routes: { primary: [], balanced: [] } }),
-    classify: () => 'read', nodeStates: () => [], telemetry: { snapshot: () => ({}) },
-    query: jest.fn().mockResolvedValue([[{ node: 'reader' }]]),
-  };
-  const stop = await runExample({ endpoint: 'http://router', token: 'token' }, {
-    emit,
-    dependencies: {
-      fetchImpl: async () => ({ ok: true, async json() { return { data: { database: 'db', credentials: { username: 'u', password: 'p' }, routes: { primary: [{ host: 'writer', port: 3306 }] }, bundleVersion: 'v1' } }; } }),
-      createDb: async () => db,
-      createRoutingStream: (options) => { options.onError(new Error('stream down')); options.onUpdate({ type: 'routing.update', version: 'v2', bundle: { routes: {} } }); return stream; },
-    },
+  const db = fakeDb();
+  const shutdown = await runExample({ endpoint: 'http://router', token: 'token' }, {
+    emit: jest.fn(), dependencies: { createDb: async () => db },
   });
   jest.advanceTimersByTime(1000);
-  await stop();
-  await stop();
-  expect(emit).toHaveBeenCalledWith(expect.objectContaining({ event: 'routing.error', error: 'stream down' }));
-  expect(emit).toHaveBeenCalledWith(expect.objectContaining({ event: 'routing.update', version: 'v2' }));
-  expect(stream.close).toHaveBeenCalledTimes(1);
+  await Promise.resolve();
+  await shutdown();
   jest.useRealTimers();
+  expect(db.query).toHaveBeenCalled();
+});
+
+test('rejects an unusable bundle before starting the example', async () => {
+  await expect(runExample({ endpoint: 'http://router', token: 'token' }, {
+      dependencies: { fetchImpl: async () => ({ ok: true, async json() { return { apiVersion: 'v1', application: 'example', database: 'db', identity: 'client', credentials: { username: 'u', password: 'p' }, routes: { primary: [], balanced: [] }, writer: { host: 'writer', port: 3306 }, readers: [], failover: [], bundleVersion: 1, nodeIdentity: 'writer', ports: { sql: 3306, http: 8080 }, expiresAt: '2099-01-01T00:00:00Z' }; } }) },
+  })).rejects.toThrow('primary.host is required');
 });

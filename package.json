@@ -29,12 +29,11 @@
     "build": "tsc --project tsconfig.json",
     "check": "tsc --noEmit --project tsconfig.json",
     "pack": "npm pack --dry-run",
-    "audit": "npm audit --omit=dev --audit-level=moderate"
+    "audit": "node scripts/run-audit.mjs"
   },
   "dependencies": {
     "@eliware/common": "2.0.0",
-    "@eliware/elera-client": "0.3.0",
-    "@eliware/elera-lib": "0.2.0",
+    "@eliware/elera-client": "file:../elera-client",
     "@eliware/snowflake": "2.0.0"
   },
   "devDependencies": {

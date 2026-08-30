@@ -1,6 +1,6 @@
 # @eliware/elera-example
 
-Runnable client example for `@eliware/elera-lib`. It obtains a routing bundle
+Runnable client example for `@eliware/elera-client`. It obtains a routing bundle
 from an Elera supervisor, maintains the routing WebSocket, runs a read/write
 SQL probe once per second, and emits concise routing and telemetry events.
 
