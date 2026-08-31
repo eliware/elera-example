@@ -3,6 +3,7 @@ import { runExample } from '../dist/src/runtime.js';
 
 function fakeDb() {
   return {
+    probe: jest.fn(async () => ({ ok: true, route: 'primary', result: [[{ node: 'reader' }], []], transaction: 'started', released: true })),
     end: jest.fn(async () => undefined),
     getConnection: jest.fn(async () => ({ beginTransaction: jest.fn(), commit: jest.fn(), rollback: jest.fn(), release: jest.fn(), execute: jest.fn().mockResolvedValue([{ insertId: 1 }]) })),
     execute: jest.fn()
