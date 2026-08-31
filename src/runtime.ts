@@ -4,7 +4,7 @@ import { scheduleProbe } from './probe-scheduler.js';
 
 export async function runExample(configuration, { emit = console.log, dependencies = { createDb } }: { emit?: (value: unknown) => void; dependencies?: { createDb?: typeof createDb } } = {}) {
   const createClient = dependencies.createDb!;
-  const db: DbPool = await createClient({ endpoint: configuration.endpoint, token: configuration.token });
+  const db: DbPool = await createClient({ endpoint: configuration.url, token: configuration.token });
   let running = true;
   emit({ event: 'client.started', timestamp: new Date().toISOString() });
   const probe = createProbeRunner({ db, emit });

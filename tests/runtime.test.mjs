@@ -19,7 +19,7 @@ test('starts the client with endpoint and token and shuts down cleanly', async (
   const db = fakeDb();
   const createClient = jest.fn(async () => db);
   const shutdown = await runExample(
-    { endpoint: 'http://router', token: 'application-token', debug: false },
+    { url: 'http://router', token: 'application-token', debug: false },
     { emit, dependencies: { createDb: createClient } },
   );
   await shutdown();
@@ -33,7 +33,7 @@ test('starts the client with endpoint and token and shuts down cleanly', async (
 test('schedules recurring probes while running', async () => {
   jest.useFakeTimers();
   const db = fakeDb();
-  const shutdown = await runExample({ endpoint: 'http://router', token: 'token' }, {
+  const shutdown = await runExample({ url: 'http://router', token: 'token' }, {
     emit: jest.fn(), dependencies: { createDb: async () => db },
   });
   jest.advanceTimersByTime(1000);
@@ -44,7 +44,7 @@ test('schedules recurring probes while running', async () => {
 });
 
 test('rejects a client creation failure before starting the example', async () => {
-  await expect(runExample({ endpoint: 'http://router', token: 'token' }, {
+  await expect(runExample({ url: 'http://router', token: 'token' }, {
     dependencies: { createDb: async () => { throw new Error('primary.host is required'); } },
   })).rejects.toThrow('primary.host is required');
 });

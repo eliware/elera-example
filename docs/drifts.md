@@ -19,7 +19,7 @@ supervisor, or lab orchestrator.
 - [x] Verify the example imports only the public `@eliware/elera-client` API
   and never imports `@eliware/elera-lib`, supervisor internals, CLI modules, or
   lab code.
-- [x] Keep required configuration limited to `ELERA_API_ENDPOINT` and
+- [x] Keep required configuration limited to `ELERA_API_URL` and
   `ELERA_API_TOKEN`; `ELERA_DEBUG` is explicitly optional local diagnostics.
 - [x] Ensure no root token, CLI token, SQL credential, physical database name,
   identity, node address, or cluster setting is required.

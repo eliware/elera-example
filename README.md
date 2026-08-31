@@ -13,7 +13,7 @@ npm run build
 node dist/app.js
 ```
 
-Set `ELERA_API_ENDPOINT` and `ELERA_API_TOKEN` in the local environment.
+Set `ELERA_API_URL` and `ELERA_API_TOKEN` in the local environment.
 The recurring read/write probe requires a runtime token with
 `database:read` and `database:write` scope. The token must be
 application-scoped; never use a root token in this client.

@@ -5,7 +5,7 @@ orchestration tool. It demonstrates how an application consumes Elera.
 
 ## Configuration
 
-The application requires `ELERA_API_ENDPOINT` and `ELERA_API_TOKEN`. The
+The application requires `ELERA_API_URL` and `ELERA_API_TOKEN`. The
 optional `ELERA_DEBUG=1` flag enables local diagnostics only; it is not part of
 the Elera connection contract. The runtime token identifies the application,
 database, identity, and scopes, and this example requires read and write scope
