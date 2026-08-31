@@ -26,6 +26,7 @@ test('starts the client with endpoint and token and shuts down cleanly', async (
   await shutdown();
   await shutdown();
   expect(db.end).toHaveBeenCalledTimes(1);
+  expect(emit).toHaveBeenCalledWith(expect.objectContaining({ event: 'client.stopped', timestamp: expect.any(String) }));
   expect(createClient).toHaveBeenCalledWith({ endpoint: 'http://router', token: 'application-token' });
   expect(emit).toHaveBeenCalledWith(expect.objectContaining({ event: 'client.started', timestamp: expect.any(String) }));
   expect(emit).toHaveBeenCalledWith(expect.objectContaining({ event: 'sql.probe', generatedId: 1 }));
@@ -47,5 +48,16 @@ test('schedules recurring probes while running', async () => {
 test('rejects a client creation failure before starting the example', async () => {
   await expect(runExample({ url: 'http://router', token: 'token' }, {
     dependencies: { createDb: async () => { throw new Error('primary.host is required'); } },
-  })).rejects.toThrow('primary.host is required');
+})).rejects.toThrow('primary.host is required');
+});
+
+test('emits no stopped marker when db.end fails', async () => {
+  const emit = jest.fn();
+  const db = fakeDb();
+  db.end.mockRejectedValueOnce(new Error('close failed'));
+  const shutdown = await runExample({ url: 'http://router', token: 'token' }, {
+    emit, dependencies: { createDb: async () => db },
+  });
+  await expect(shutdown()).rejects.toThrow('close failed');
+  expect(emit).not.toHaveBeenCalledWith(expect.objectContaining({ event: 'client.stopped' }));
 });

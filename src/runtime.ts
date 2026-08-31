@@ -15,5 +15,6 @@ export async function runExample(configuration, { emit = console.log, dependenci
     running = false;
     clearInterval(timer);
     await db.end();
+    emit({ event: 'client.stopped', timestamp: new Date().toISOString() });
   };
 }
