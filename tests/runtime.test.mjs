@@ -32,6 +32,24 @@ test('starts the client with endpoint and token and shuts down cleanly', async (
   expect(emit).toHaveBeenCalledWith(expect.objectContaining({ event: 'sql.probe', generatedId: 1 }));
 });
 
+test('waits for the initial probe before scheduling recurring probes', async () => {
+  jest.useFakeTimers();
+  const events = [];
+  const db = fakeDb();
+  db.probe.mockImplementationOnce(async () => {
+    events.push('initial-start');
+    await Promise.resolve();
+    events.push('initial-end');
+    return { ok: true, route: 'primary', result: [[{ node: 'reader' }], []], transaction: 'started', released: true };
+  });
+  const shutdown = await runExample({ url: 'http://router', token: 'token' }, {
+    emit: () => {}, dependencies: { createDb: async () => db },
+  });
+  expect(events).toEqual(['initial-start', 'initial-end']);
+  await shutdown();
+  jest.useRealTimers();
+});
+
 test('schedules recurring probes while running', async () => {
   jest.useFakeTimers();
   const db = fakeDb();

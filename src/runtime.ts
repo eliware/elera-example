@@ -8,8 +8,8 @@ export async function runExample(configuration, { emit = console.log, dependenci
   let running = true;
   emit({ event: 'client.started', timestamp: new Date().toISOString() });
   const probe = createProbeRunner({ db, emit });
-  const timer = setInterval(() => scheduleProbe(running, probe), 1000);
   await probe();
+  const timer = setInterval(() => scheduleProbe(running, probe), 1000);
   return async function shutdown() {
     if (!running) return;
     running = false;
