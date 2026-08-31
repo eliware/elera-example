@@ -1,5 +1,5 @@
 import { readConfiguration } from './src/configuration.js';
-import { runExample } from './src/runtime.js';
+import { runExample } from './src/runtime/index.js';
 import { log } from '@eliware/common';
 import { registerExampleLifecycle } from './src/lifecycle.js';
 

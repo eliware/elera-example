@@ -1,5 +1,5 @@
 import { expect, jest, test } from '@jest/globals';
-import { runExample } from '../dist/src/runtime.js';
+import { runExample } from '../../dist/src/runtime/index.js';
 
 function fakeDb() {
   return {

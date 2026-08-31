@@ -1,5 +1,5 @@
 import { expect, jest, test } from '@jest/globals';
-import { createProbeRunner } from '../src/probe.ts';
+import { createProbeRunner } from '../../dist/src/probe/runner.js';
 
 test('emits concise read/write probe telemetry', async () => {
   const connection = { beginTransaction: jest.fn(), commit: jest.fn(), rollback: jest.fn(), release: jest.fn(), execute: jest.fn().mockResolvedValue([{ insertId: 4 }]) };
