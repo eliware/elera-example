@@ -3,16 +3,12 @@ import { runExample } from '../dist/src/runtime.js';
 
 function fakeDb() {
   return {
-    close: jest.fn(async () => undefined),
-    bundle: () => ({ bundleVersion: 'v1', writer: { host: 'writer' }, routes: { primary: [], balanced: [] } }),
-    classify: (sql) => sql.startsWith('SELECT') ? 'read' : 'write',
-    nodeStates: () => [],
-    telemetry: { snapshot: () => ({ retries: 0, reconnects: 0 }) },
-    query: jest.fn()
+    end: jest.fn(async () => undefined),
+    getConnection: jest.fn(async () => ({ beginTransaction: jest.fn(), commit: jest.fn(), rollback: jest.fn(), release: jest.fn(), execute: jest.fn().mockResolvedValue([{ insertId: 1 }]) })),
+    execute: jest.fn()
       .mockResolvedValueOnce([[{ node: 'reader' }]])
       .mockResolvedValueOnce([[{ Variable_name: 'wsrep_local_state_comment', Value: 'Synced' }, { Variable_name: 'wsrep_cluster_status', Value: 'Primary' }]])
       .mockResolvedValueOnce([{}])
-      .mockResolvedValueOnce([{ insertId: 1 }])
       .mockResolvedValueOnce([[{ writer_node: 'writer' }]])
       .mockResolvedValue([[]]),
   };
@@ -27,7 +23,8 @@ test('starts the client with endpoint and token and shuts down cleanly', async (
   );
   await shutdown();
   await shutdown();
-  expect(db.close).toHaveBeenCalled();
+  expect(db.end).toHaveBeenCalledTimes(1);
+  expect(emit).toHaveBeenCalledWith(expect.objectContaining({ event: 'client.started', timestamp: expect.any(String) }));
   expect(emit).toHaveBeenCalledWith(expect.objectContaining({ event: 'sql.probe', generatedId: 1 }));
 });
 
@@ -41,11 +38,11 @@ test('schedules recurring probes while running', async () => {
   await Promise.resolve();
   await shutdown();
   jest.useRealTimers();
-  expect(db.query).toHaveBeenCalled();
+  expect(db.execute).toHaveBeenCalled();
 });
 
-test('rejects an unusable bundle before starting the example', async () => {
+test('rejects a client creation failure before starting the example', async () => {
   await expect(runExample({ endpoint: 'http://router', token: 'token' }, {
-      dependencies: { fetchImpl: async () => ({ ok: true, async json() { return { apiVersion: 'v1', application: 'example', database: 'db', identity: 'client', credentials: { username: 'u', password: 'p' }, routes: { primary: [], balanced: [] }, writer: { host: 'writer', port: 3306 }, readers: [], failover: [], bundleVersion: 1, nodeIdentity: 'writer', ports: { sql: 3306, http: 8080 }, expiresAt: '2099-01-01T00:00:00Z' }; } }) },
+    dependencies: { createDb: async () => { throw new Error('primary.host is required'); } },
   })).rejects.toThrow('primary.host is required');
 });

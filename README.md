@@ -1,8 +1,8 @@
 # @eliware/elera-example
 
-Runnable client example for `@eliware/elera-client`. It obtains a routing bundle
-from an Elera supervisor, maintains the routing WebSocket, runs a read/write
-SQL probe once per second, and emits concise routing and telemetry events.
+Runnable client example for `@eliware/elera-client`. It uses the client’s
+mysql2-compatible pool API, runs a read/write SQL probe once per second, and
+emits concise probe events.
 
 ## Setup
 
@@ -13,17 +13,19 @@ npm run build
 node dist/app.js
 ```
 
-Set only `ELERA_API_ENDPOINT` and `ELERA_API_TOKEN` in the local environment.
-The token must be application-scoped; never use a root token in this client.
+Set `ELERA_API_ENDPOINT` and `ELERA_API_TOKEN` in the local environment.
+The recurring read/write probe requires a runtime token with
+`database:read` and `database:write` scope. The token must be
+application-scoped; never use a root token in this client.
 The token determines the application, database, and credential context.
-`ELERA_DEBUG=1` enables diagnostic output.
-
-The client identity is generated internally with `@eliware/snowflake`; it is
-not an environment variable and must not be supplied by the application.
+Optionally set `ELERA_DEBUG=1` for local diagnostic output; it is not an Elera
+connection setting or credential.
 
 The example creates and writes `sample_app.e2e_probe`. Its generated IDs and
-reported writer host make writer assignment and failover observable. It exits
-cleanly on `SIGTERM` and `SIGINT`, closing the routing stream and SQL pool.
+reported database nodes make the write path observable. It uses `execute()`
+for queries, an acquired connection with begin/commit/rollback/release for the
+write transaction, and `end()` for shutdown. It exits cleanly on `SIGTERM` and
+`SIGINT`; shutdown is idempotent and ends the managed client once.
 
 ## Validation
 
@@ -33,6 +35,18 @@ npm run lint
 npm run check
 npm run audit
 ```
+
+## Operations
+
+This is a runnable client example, not a network service. It has no listening
+port or separate health/readiness endpoint; use the client probe output and
+process exit status for local validation. Logs are concise structured events
+written to standard output, and `ELERA_DEBUG=1` enables optional diagnostics.
+
+Deployment, backups, rollback, and runtime secret management belong to the
+consuming application's environment. This repository has no container or
+Kubernetes deployment; its Knit validation commands are the source of truth
+for repository synchronization.
 
 This repository intentionally contains no Docker, Kubernetes, supervisor, or
 GitOps configuration. Those integrations consume this example from their own

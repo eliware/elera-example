@@ -33,8 +33,7 @@
   },
   "dependencies": {
     "@eliware/common": "2.0.0",
-    "@eliware/elera-client": "file:../elera-client",
-    "@eliware/snowflake": "2.0.0"
+    "@eliware/elera-client": "file:../elera-client"
   },
   "devDependencies": {
     "@eliware/test": "^2.1.3",

@@ -1,10 +1,10 @@
-import { createDb, type DbClient } from '@eliware/elera-client';
+import { createDb, type DbPool } from '@eliware/elera-client';
 import { createProbeRunner } from './probe.js';
 import { scheduleProbe } from './probe-scheduler.js';
 
-export async function runExample(configuration, { emit = console.log, dependencies = {} }: { emit?: (value: unknown) => void; dependencies?: { createDb?: typeof createDb; fetchImpl?: typeof fetch } } = {}) {
-  const createClient = dependencies.createDb ?? createDb;
-  const db: DbClient = await createClient({ endpoint: configuration.endpoint, token: configuration.token, fetchImpl: dependencies.fetchImpl, telemetry: true });
+export async function runExample(configuration, { emit = console.log, dependencies = { createDb } }: { emit?: (value: unknown) => void; dependencies?: { createDb?: typeof createDb } } = {}) {
+  const createClient = dependencies.createDb!;
+  const db: DbPool = await createClient({ endpoint: configuration.endpoint, token: configuration.token });
   let running = true;
   emit({ event: 'client.started', timestamp: new Date().toISOString() });
   const probe = createProbeRunner({ db, emit });
@@ -14,6 +14,6 @@ export async function runExample(configuration, { emit = console.log, dependenci
     if (!running) return;
     running = false;
     clearInterval(timer);
-    await db.close();
+    await db.end();
   };
 }
