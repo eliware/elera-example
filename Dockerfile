@@ -10,9 +10,15 @@ COPY elera-client/ ./elera-client/
 COPY elera-lib/ ./elera-lib/
 
 WORKDIR /workspace/elera-example
-RUN npm ci --ignore-scripts \
+# Copy local file: dependencies into node_modules so the runtime stage does not
+# depend on the build workspace's paths or symlinks.
+RUN rm -rf node_modules dist \
+  && npm install --ignore-scripts --install-links=true \
   && npm run build \
-  && npm prune --omit=dev
+  && npm prune --omit=dev \
+  && rm -rf node_modules/@eliware/elera-client node_modules/@eliware/elera-lib \
+  && cp -R /workspace/elera-client node_modules/@eliware/elera-client \
+  && cp -R /workspace/elera-lib node_modules/@eliware/elera-lib
 
 FROM node:26-bookworm-slim AS runtime
 
