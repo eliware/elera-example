@@ -1,7 +1,7 @@
 import { expect, test } from '@jest/globals';
 import { createDb } from '@eliware/elera-client';
 
-const bundle = { apiVersion: 'v1', application: 'example', database: 'example_db', identity: 'example-client', credentials: { username: 'example', password: 'test-only' }, routes: { primary: [{ host: 'elera-0', port: 3306 }], balanced: [{ host: 'elera-0', port: 3306 }] }, writer: { host: 'elera-0', port: 3306 }, readers: [], failover: [], bundleVersion: 1, nodeIdentity: 'elera-0', ports: { sql: 3306, http: 8080 }, expiresAt: '2099-01-01T00:00:00Z' };
+const bundle = { apiVersion: 'v1', application: 'example', database: 'example_db', physicalDatabase: 'elera_db_123', identity: 'example-client', credentials: { username: 'example', password: 'test-only' }, routes: { primary: [{ host: 'elera-0', port: 3306 }], balanced: [{ host: 'elera-0', port: 3306 }] }, writer: { host: 'elera-0', port: 3306 }, readers: [], failover: [], bundleVersion: 1, nodeIdentity: 'elera-0', ports: { sql: 3306, http: 8080 }, expiresAt: '2099-01-01T00:00:00Z' };
 
 class MockSupervisorSocket {
   constructor(url) { this.url = url; this.readyState = 0; queueMicrotask(() => { this.readyState = 1; this.onopen?.(); }); }

@@ -17,13 +17,15 @@ function fakeDb() {
 test('starts the client with endpoint and token and shuts down cleanly', async () => {
   const emit = jest.fn();
   const db = fakeDb();
+  const createClient = jest.fn(async () => db);
   const shutdown = await runExample(
     { endpoint: 'http://router', token: 'application-token', debug: false },
-    { emit, dependencies: { createDb: async () => db } },
+    { emit, dependencies: { createDb: createClient } },
   );
   await shutdown();
   await shutdown();
   expect(db.end).toHaveBeenCalledTimes(1);
+  expect(createClient).toHaveBeenCalledWith({ endpoint: 'http://router', token: 'application-token' });
   expect(emit).toHaveBeenCalledWith(expect.objectContaining({ event: 'client.started', timestamp: expect.any(String) }));
   expect(emit).toHaveBeenCalledWith(expect.objectContaining({ event: 'sql.probe', generatedId: 1 }));
 });
