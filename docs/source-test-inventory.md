@@ -9,13 +9,23 @@ under the matching `tests/` subtree. `index.ts` files are composition modules;
 | `src/configuration/index.ts` | `tests/configuration/index.test.ts` | Configuration |
 | `src/lifecycle/index.ts` | `tests/lifecycle/index.test.mjs` | Signal and process-handler registration |
 | `src/probe/runner.ts` | `tests/probe/runner.test.ts` | Read/write composition and errors |
-| `src/probe/{health,status,schema,write,readback}.ts` | `tests/probe/runner.test.ts` | Query, schema, transaction, and readback composition |
-| `src/probe/{events,result-summary,telemetry-state,telemetry,queries}.ts` | `tests/probe/runner.test.ts` | Telemetry composition and summaries |
-| `src/runtime/index.ts` | `tests/runtime/lifecycle.test.mjs` | Startup and initial probe |
-| `src/runtime/client.ts` | `tests/runtime/lifecycle.test.mjs` | Public client construction |
-| `src/runtime/shutdown.ts` | `tests/runtime/lifecycle.test.mjs` | Idempotent cleanup and stop telemetry |
-| `src/runtime/scheduler/{core,index}.ts` | `tests/runtime/scheduler/index.test.mjs` | Scheduling |
-| `src/probe/index.ts`, `src/runtime/scheduler/index.ts` | Composition imports | Barrels only |
+| `src/probe/health.ts` | `tests/probe/health.test.mjs` | Health query |
+| `src/probe/status.ts` | `tests/probe/status.test.mjs` | Status mapping |
+| `src/probe/schema.ts` | `tests/probe/schema.test.mjs` | Table creation |
+| `src/probe/write.ts` | `tests/probe/write.test.mjs` | Transactional write |
+| `src/probe/readback.ts` | `tests/probe/readback.test.mjs` | Writer readback |
+| `src/probe/result-summary.ts` | `tests/probe/result-summary.test.mjs` | Result summary |
+| `src/probe/telemetry-state.ts` | `tests/probe/telemetry-state.test.mjs` | State initialization |
+| `src/probe/events.ts` | `tests/probe/events.test.mjs` | Success/failure events |
+| `src/probe/telemetry.ts` | `tests/probe/telemetry.test.mjs` | Telemetry lifecycle |
+| `src/probe/queries.ts` | `tests/probe/queries.test.mjs` | Probe composition |
+| `src/probe/runner.ts` | `tests/probe/runner.test.ts` | Runner composition and errors |
+| `src/runtime/index.ts` | `tests/runtime/index.test.mjs` | Startup, scheduling, and cleanup |
+| `src/runtime/client.ts` | `tests/runtime/client.test.mjs` | Public client construction |
+| `src/runtime/shutdown.ts` | `tests/runtime/shutdown.test.mjs` | Idempotent cleanup |
+| `src/runtime/scheduler/core.ts` | `tests/runtime/scheduler/core.test.mjs` | Active scheduling gate |
+| `src/runtime/scheduler/index.ts` | `tests/runtime/scheduler/index.test.mjs` | Interval scheduling |
+| `src/probe/index.ts` | `tests/probe/index.test.mjs` | Public barrel/client contract smoke test |
 
 The application is private and is not a published library, so package
 `exports` and declaration files are intentionally not provided. Build output

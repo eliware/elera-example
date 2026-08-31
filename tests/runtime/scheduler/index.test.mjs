@@ -1,9 +1,12 @@
 import { expect, jest, test } from '@jest/globals';
-import { scheduleProbe } from '../../../dist/src/runtime/scheduler/core.js';
+import { startProbeSchedule } from '../../../dist/src/runtime/scheduler/index.js';
 
-test('runs only while active', () => {
+test('starts a scheduler that invokes the probe at its interval', () => {
+  jest.useFakeTimers();
   const probe = jest.fn();
-  scheduleProbe(true, probe);
-  scheduleProbe(false, probe);
+  const timer = startProbeSchedule(() => true, probe, 50);
+  jest.advanceTimersByTime(50);
+  clearInterval(timer);
+  jest.useRealTimers();
   expect(probe).toHaveBeenCalledTimes(1);
 });
