@@ -1,4 +1,4 @@
-import { scheduleProbe } from '../probe-scheduler.js';
+import { scheduleProbe } from './scheduler-core.js';
 
 export function startProbeSchedule(running, probe, intervalMs = 1000) {
   return setInterval(() => scheduleProbe(running(), probe), intervalMs);

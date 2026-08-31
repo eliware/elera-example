@@ -1,5 +1,5 @@
 import { expect, jest, test } from '@jest/globals';
-import { scheduleProbe } from '../../dist/src/probe-scheduler.js';
+import { scheduleProbe } from '../../dist/src/runtime/scheduler-core.js';
 
 test('runs only while active', () => {
   const probe = jest.fn();
