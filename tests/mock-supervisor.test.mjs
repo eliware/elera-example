@@ -12,7 +12,7 @@ test('uses only endpoint and token with a mock supervisor', async () => {
   const fetchImpl = async (url, options) => {
     expect(url).toBe('http://mock-supervisor:8080/api/v1/routing/bundle');
     expect(options.headers.authorization).toBe('Bearer example-token');
-    return { ok: true, json: async () => bundle };
+    return { ok: true, json: async () => ({ ok: true, operation: 'routing.bundle', data: bundle }) };
   };
   const db = await createDb({ endpoint: 'http://mock-supervisor:8080', token: 'example-token', fetchImpl, WebSocketImpl: MockSupervisorSocket });
   expect(typeof db.query).toBe('function');
