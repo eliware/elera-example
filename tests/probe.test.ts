@@ -6,7 +6,7 @@ test('emits concise read/write probe telemetry', async () => {
   const db = { probe: jest.fn().mockResolvedValue({ ok: true, route: 'primary', result: [[{ node: 'elera-0' }], []], transaction: 'started', released: true }), execute: jest.fn().mockResolvedValueOnce([[{ Variable_name: 'wsrep_cluster_status', Value: 'Primary' }]]).mockResolvedValueOnce([{}]).mockResolvedValueOnce([[{ writer_node: 'elera-0' }]]), getConnection: jest.fn().mockResolvedValue(connection) };
   const emit = jest.fn();
   await createProbeRunner({ db, emit })();
-  expect(emit).toHaveBeenCalledWith(expect.objectContaining({ event: 'sql.probe', operation: 'read+write', route: 'primary', transaction: 'started', released: true, readNode: 'elera-0', readbackNode: 'elera-0', generatedId: 4, clusterStatus: 'Primary', latencyMs: expect.any(Number) }));
+  expect(emit).toHaveBeenCalledWith(expect.objectContaining({ event: 'sql.probe', operation: 'read+write', route: 'primary', transaction: 'started', released: true, resultSummary: { mysql2Tuple: true, rowsPresent: true, fieldsPresent: true, rowCount: 1, fieldCount: 0 }, readNode: 'elera-0', readbackNode: 'elera-0', generatedId: 4, clusterStatus: 'Primary', latencyMs: expect.any(Number) }));
 });
 
 test('emits errors without throwing from the interval runner', async () => {
