@@ -3,5 +3,5 @@
 ## Unreleased
 
 - Extracted the Elera client example into its own repository.
-- Added focused runtime modules, tests, documentation, and standard project
-  validation metadata.
+- Added focused runtime modules, matching test organization, documentation,
+  a production container entrypoint, and standard project validation metadata.

@@ -1,5 +1,5 @@
-# Build from C:\Users\russe\src so the intentional local Elera package links
-# resolve during npm ci:
+# Build from the parent source directory so the intentional local Elera package
+# links resolve during npm ci:
 #   docker build -f elera-example/Dockerfile -t elera-example elera-example/..
 FROM node:26-bookworm-slim AS build
 

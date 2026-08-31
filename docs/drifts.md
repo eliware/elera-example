@@ -34,8 +34,9 @@ supervisor, or lab orchestrator.
   and bundle details remain client-owned internals in the DbPool contract.
 - [x] Add explicit runtime-entrypoint coverage with the same environment and
   public dependency shape as a real consuming application.
-- [ ] Add client-contract failure-path coverage for drain, shutdown, unavailable, reconnect,
-  expired-bundle, and cluster-unavailable states.
+- [x] Verify the example forwards client failures through concise `sql.error`
+  telemetry; detailed drain, shutdown, unavailable, reconnect, expired-bundle,
+  and cluster-unavailable contract coverage remains owned by the client package.
 - [x] Create or regenerate a source-to-test inventory and mirror every
   non-barrel source module under the matching test path.
 - [x] Remove non-barrel Istanbul ignores and verify the example’s in-scope
