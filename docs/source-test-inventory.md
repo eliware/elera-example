@@ -17,10 +17,14 @@ under the matching `tests/` subtree. `index.ts` files are composition modules;
 | `src/probe/result-summary.ts` | `tests/probe/result-summary.test.mjs` | Result summary |
 | `src/probe/telemetry-state.ts` | `tests/probe/telemetry-state.test.mjs` | State initialization |
 | `src/probe/events.ts` | `tests/probe/events.test.mjs` | Success/failure events |
+| `src/probe/events/success.ts` | `tests/probe/events/success.test.mjs` | Success event formatting |
+| `src/probe/events/failure.ts` | `tests/probe/events/failure.test.mjs` | Failure event formatting |
 | `src/probe/telemetry.ts` | `tests/probe/telemetry.test.mjs` | Telemetry lifecycle |
 | `src/probe/queries.ts` | `tests/probe/queries.test.mjs` | Probe composition |
 | `src/probe/runner.ts` | `tests/probe/runner.test.ts` | Runner composition and errors |
 | `src/runtime/index.ts` | `tests/runtime/index.test.mjs` | Startup, scheduling, and cleanup |
+| `src/runtime/startup.ts` | `tests/runtime/startup.test.mjs` | Initial startup/probe |
+| `src/runtime/schedule.ts` | `tests/runtime/schedule.test.mjs` | Recurring schedule wiring |
 | `src/runtime/client.ts` | `tests/runtime/client.test.mjs` | Public client construction |
 | `src/runtime/shutdown.ts` | `tests/runtime/shutdown.test.mjs` | Idempotent cleanup |
 | `src/runtime/scheduler/core.ts` | `tests/runtime/scheduler/core.test.mjs` | Active scheduling gate |
