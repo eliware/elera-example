@@ -1,5 +1,5 @@
 import { jest, test } from '@jest/globals';
-import { registerExampleLifecycle } from '../../dist/src/lifecycle.js';
+import { registerExampleLifecycle } from '../../dist/src/lifecycle/index.js';
 
 test('registers and removes application lifecycle handlers', () => {
   const shutdown = jest.fn(async () => undefined);

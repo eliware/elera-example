@@ -1,7 +1,7 @@
-import { readConfiguration } from './src/configuration.js';
+import { readConfiguration } from './src/configuration/index.js';
 import { runExample } from './src/runtime/index.js';
 import { log } from '@eliware/common';
-import { registerExampleLifecycle } from './src/lifecycle.js';
+import { registerExampleLifecycle } from './src/lifecycle/index.js';
 
 const shutdown = await runExample(readConfiguration());
 const lifecycle = registerExampleLifecycle(shutdown);

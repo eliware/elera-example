@@ -1,7 +1,7 @@
 import { createDb } from '@eliware/elera-client';
 import { createProbeRunner } from '../probe/index.js';
 import { createExampleClient } from './client.js';
-import { startProbeSchedule } from './scheduler.js';
+import { startProbeSchedule } from './scheduler/index.js';
 import { createShutdown } from './shutdown.js';
 
 export async function runExample(configuration, { emit = console.log, dependencies = { createDb } } = {}) {
