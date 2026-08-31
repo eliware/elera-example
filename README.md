@@ -36,6 +36,19 @@ npm run check
 npm run audit
 ```
 
+## Container
+
+Build from the parent source directory while the client and shared library
+remain local linked dependencies:
+
+```text
+docker build -f elera-example/Dockerfile -t elera-example elera-example/..
+docker run --rm --env-file elera-example/.env elera-example
+```
+
+The image runs the compiled app as the non-root `node` user. It contains no
+credentials; provide the endpoint and token at runtime.
+
 ## Operations
 
 This is a runnable client example, not a network service. It has no listening
