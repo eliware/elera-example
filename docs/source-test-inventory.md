@@ -7,7 +7,9 @@ under the matching `tests/` subtree. `index.ts` files are composition modules;
 | Source | Test | Coverage focus |
 | --- | --- | --- |
 | `src/configuration/index.ts` | `tests/configuration/index.test.ts` | Configuration |
+| `src/configuration/read.ts` | `tests/configuration/read.test.mjs` | Environment configuration parsing |
 | `src/lifecycle/index.ts` | `tests/lifecycle/index.test.mjs` | Signal and process-handler registration |
+| `src/lifecycle/register.ts` | `tests/lifecycle/register.test.mjs` | Lifecycle registration implementation |
 | `src/probe/runner.ts` | `tests/probe/runner.test.ts` | Read/write composition and errors |
 | `src/probe/health.ts` | `tests/probe/health.test.mjs` | Health query |
 | `src/probe/status.ts` | `tests/probe/status.test.mjs` | Status mapping |
@@ -23,6 +25,7 @@ under the matching `tests/` subtree. `index.ts` files are composition modules;
 | `src/probe/queries.ts` | `tests/probe/queries.test.mjs` | Probe composition |
 | `src/probe/runner.ts` | `tests/probe/runner.test.ts` | Runner composition and errors |
 | `src/runtime/index.ts` | `tests/runtime/index.test.mjs` | Startup, scheduling, and cleanup |
+| `src/runtime/run.ts` | `tests/runtime/run.test.mjs` | Runtime assembly |
 | `src/runtime/startup.ts` | `tests/runtime/startup.test.mjs` | Initial startup/probe |
 | `src/runtime/schedule.ts` | `tests/runtime/schedule.test.mjs` | Recurring schedule wiring |
 | `src/runtime/client.ts` | `tests/runtime/client.test.mjs` | Public client construction |
