@@ -16,8 +16,9 @@ application names, identities, nodes, or cluster settings.
 
 The example uses the public `@eliware/elera-client` package and its
 `probe` health operation, mysql2-compatible `execute` for status/schema/readback,
-`getConnection` plus connection transaction methods for the write, and `end`
-lifecycle method to run simple read/write probes. Its telemetry is
+and `getConnection` plus connection transaction methods for the write; these
+operations are composed into one simple read/write probe, with `end` providing
+the lifecycle method. Its telemetry is
 limited to query results, timing, observed database nodes, and errors.
 The initial probe completes before a 1000 ms recurring schedule begins. Probe
 failures are contained and emitted as `sql.error` so later probes can observe

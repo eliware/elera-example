@@ -8,11 +8,11 @@ process signal handlers during the unit suite).
 
 | Source | Test | Coverage focus |
 | --- | --- | --- |
-| `src/configuration/index.ts` | `tests/configuration/index.test.ts` | Configuration |
+| `src/configuration/index.ts` | `tests/configuration/index.test.mjs` | Configuration barrel |
 | `src/configuration/read.ts` | `tests/configuration/read.test.mjs` | Environment configuration parsing |
 | `src/lifecycle/index.ts` | `tests/lifecycle/index.test.mjs` | Signal and process-handler registration |
 | `src/lifecycle/register.ts` | `tests/lifecycle/register.test.mjs` | Lifecycle registration implementation |
-| `src/probe/runner.ts` | `tests/probe/runner.test.ts` | Read/write composition and errors |
+| `src/probe/runner.ts` | `tests/probe/runner.test.mjs` | Read/write composition and errors |
 | `src/probe/health.ts` | `tests/probe/health.test.mjs` | Health query |
 | `src/probe/status.ts` | `tests/probe/status.test.mjs` | Status mapping |
 | `src/probe/schema.ts` | `tests/probe/schema.test.mjs` | Table creation |
