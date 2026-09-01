@@ -23,7 +23,6 @@ under the matching `tests/` subtree. `index.ts` files are composition modules;
 | `src/probe/events/failure.ts` | `tests/probe/events/failure.test.mjs` | Failure event formatting |
 | `src/probe/telemetry.ts` | `tests/probe/telemetry.test.mjs` | Telemetry lifecycle |
 | `src/probe/queries.ts` | `tests/probe/queries.test.mjs` | Probe composition |
-| `src/probe/runner.ts` | `tests/probe/runner.test.ts` | Runner composition and errors |
 | `src/runtime/index.ts` | `tests/runtime/index.test.mjs` | Startup, scheduling, and cleanup |
 | `src/runtime/run.ts` | `tests/runtime/run.test.mjs` | Runtime assembly |
 | `src/runtime/startup.ts` | `tests/runtime/startup.test.mjs` | Initial startup/probe |

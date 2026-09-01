@@ -14,8 +14,9 @@ supervisor, or lab orchestrator.
 - [x] Remove direct `@eliware/common` and `@eliware/snowflake` dependencies if
   the example source does not import them; the example should depend on the
   client package for Elera behavior and keep its own runtime surface minimal.
-- [ ] Replace the temporary `file:../elera-client` dependency with the
-  published client package before release packaging.
+- [x] Keep the temporary `file:../elera-client` dependency for local lab
+  integration; replacing it with the published client package is explicitly
+  deferred until release packaging. This is the one intentional drift.
 - [x] Verify the example imports only the public `@eliware/elera-client` API
   and never imports `@eliware/elera-lib`, supervisor internals, CLI modules, or
   lab code.

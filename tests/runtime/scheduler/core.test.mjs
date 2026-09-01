@@ -6,4 +6,5 @@ test('runs only while active', () => {
   scheduleProbe(true, probe);
   scheduleProbe(false, probe);
   expect(probe).toHaveBeenCalledTimes(1);
+  expect(probe).toHaveBeenCalledWith();
 });

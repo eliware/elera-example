@@ -17,9 +17,17 @@ const result = spawnSync(npm, ['audit', '--omit=dev', '--audit-level=moderate', 
   timeout: 120000,
 });
 
-if (result.error) throw result.error;
+if (result.error) {
+  const reason = result.error.code === 'ETIMEDOUT' ? 'timed out after 120000ms' : `${result.error.code ?? 'spawn error'}: ${result.error.message}`;
+  console.error(`npm audit failed to complete (${reason})`);
+  process.exit(1);
+}
 if (result.signal) {
   console.error(`npm audit terminated by ${result.signal}`);
+  process.exit(1);
+}
+if (result.status === null) {
+  console.error('npm audit ended without an exit status');
   process.exit(1);
 }
 process.exit(result.status ?? 1);

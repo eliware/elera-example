@@ -38,8 +38,9 @@ npm run audit
 
 ## Container
 
-Build from the parent source directory while the client and shared library
-remain local linked dependencies:
+For local development, build from the parent source directory while the client
+and shared library remain local linked dependencies. Release packaging must use
+the published client package instead:
 
 ```text
 docker build -f elera-example/Dockerfile -t elera-example elera-example/..
@@ -57,10 +58,10 @@ process exit status for local validation. Logs are concise structured events
 written to standard output, and `ELERA_DEBUG=1` enables optional diagnostics.
 
 Deployment, backups, rollback, and runtime secret management belong to the
-consuming application's environment. This repository has no container or
-Kubernetes deployment; its Knit validation commands are the source of truth
+consuming application's environment. This repository has no Kubernetes
+deployment; its Knit validation commands are the source of truth
 for repository synchronization.
 
-This repository intentionally contains no Docker, Kubernetes, supervisor, or
-GitOps configuration. Those integrations consume this example from their own
-test harnesses.
+This repository intentionally contains only the example's Dockerfile; it has no
+Kubernetes, supervisor, or GitOps configuration. Those integrations consume this
+example from their own test harnesses.
