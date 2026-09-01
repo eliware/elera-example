@@ -2,7 +2,9 @@
 
 Each non-barrel source module is exercised by a focused or composition test
 under the matching `tests/` subtree. `index.ts` files are composition modules;
-`app.ts` is wiring-only and is exercised through the runtime-entrypoint tests.
+`app.ts` is wiring-only and is validated by the build plus the lifecycle and
+runtime composition tests rather than imported directly (to avoid installing
+process signal handlers during the unit suite).
 
 | Source | Test | Coverage focus |
 | --- | --- | --- |
@@ -36,3 +38,8 @@ under the matching `tests/` subtree. `index.ts` files are composition modules;
 The application is private and is not a published library, so package
 `exports` and declaration files are intentionally not provided. Build output
 is generated in `dist/` and ignored by Git.
+
+Composition-test exception: runtime scheduling, shutdown, and error paths are
+covered in the runtime composition suite in addition to focused module tests.
+The focused tests intentionally do not duplicate every branch already covered
+by those composition cases.

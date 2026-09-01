@@ -15,10 +15,12 @@ application names, identities, nodes, or cluster settings.
 ## Runtime behavior
 
 The example uses the public `@eliware/elera-client` package and its
-mysql2-compatible `execute`, `getConnection`, connection transaction methods,
-and `end` lifecycle method to run simple read/write probes. Its telemetry is
+`probe` health operation, mysql2-compatible `execute` for status/schema/readback,
+`getConnection` plus connection transaction methods for the write, and `end`
+lifecycle method to run simple read/write probes. Its telemetry is
 limited to query results, timing, observed database nodes, and errors.
-Shutdown is idempotent. It may report probe observations, but it does not
+Shutdown is idempotent; close failures propagate and do not produce a successful
+stop marker. It may report probe observations, but it does not
 provision resources,
 bootstrap Galera, drain nodes, perform recovery, or invoke CLI workflows.
 

@@ -22,10 +22,13 @@ Optionally set `ELERA_DEBUG=1` for local diagnostic output; it is not an Elera
 connection setting or credential.
 
 The example creates and writes `sample_app.e2e_probe`. Its generated IDs and
-reported database nodes make the write path observable. It uses `execute()`
-for queries, an acquired connection with begin/commit/rollback/release for the
+reported database nodes make the write path observable. It uses the client
+`probe()` operation for the health read, `execute()` for status/schema/readback
+queries, an acquired connection with begin/commit/rollback/release for the
 write transaction, and `end()` for shutdown. It exits cleanly on `SIGTERM` and
-`SIGINT`; shutdown is idempotent and ends the managed client once.
+`SIGINT`; shutdown is idempotent and ends the managed client once. If client
+shutdown fails, the error is propagated and no successful stopped marker is
+emitted.
 
 ## Validation
 
