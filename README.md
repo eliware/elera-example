@@ -28,7 +28,9 @@ queries, an acquired connection with begin/commit/rollback/release for the
 write transaction, and `end()` for shutdown. It exits cleanly on `SIGTERM` and
 `SIGINT`; shutdown is idempotent and ends the managed client once. If client
 shutdown fails, the error is propagated and no successful stopped marker is
-emitted.
+emitted. After the initial probe, a new probe is scheduled every 1000 ms while
+the process is running; probe failures are contained by the runner and emitted
+as `sql.error` events so the process can continue observing recovery.
 
 ## Validation
 

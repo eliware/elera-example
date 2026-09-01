@@ -19,8 +19,11 @@ The example uses the public `@eliware/elera-client` package and its
 `getConnection` plus connection transaction methods for the write, and `end`
 lifecycle method to run simple read/write probes. Its telemetry is
 limited to query results, timing, observed database nodes, and errors.
-Shutdown is idempotent; close failures propagate and do not produce a successful
-stop marker. It may report probe observations, but it does not
+The initial probe completes before a 1000 ms recurring schedule begins. Probe
+failures are contained and emitted as `sql.error` so later probes can observe
+recovery. Shutdown is idempotent after a successful close; close failures
+propagate and do not produce a successful stop marker, and a later shutdown may
+retry the close. It may report probe observations, but it does not
 provision resources,
 bootstrap Galera, drain nodes, perform recovery, or invoke CLI workflows.
 
