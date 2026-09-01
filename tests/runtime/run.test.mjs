@@ -6,5 +6,7 @@ test('assembles the runtime dependencies', async () => {
   const emit = jest.fn();
   const shutdown = await runExample({ url: 'http://router', token: 'token' }, { emit, dependencies: { createDb: async () => db } });
   await shutdown();
-  expect(db.end).toHaveBeenCalledTimes(1); expect(emit).toHaveBeenCalledWith(expect.objectContaining({ event: 'client.started' }));
+  expect(db.end).toHaveBeenCalledTimes(1);
+  expect(emit).toHaveBeenCalledWith(expect.objectContaining({ event: 'client.started' }));
+  expect(emit).toHaveBeenCalledWith(expect.objectContaining({ event: 'sql.error', error: 'offline' }));
 });
