@@ -16,7 +16,7 @@ supervisor, or lab orchestrator.
   client package for Elera behavior and keep its own runtime surface minimal.
 - [x] Keep the temporary `file:../elera-client` dependency for local lab
   integration; replacing it with the published client package is explicitly
-  deferred until release packaging. This is the one intentional drift.
+  deferred until release packaging. This is intentional development state.
 - [x] Verify the example imports only the public `@eliware/elera-client` API
   and never imports `@eliware/elera-lib`, supervisor internals, CLI modules, or
   lab code.
