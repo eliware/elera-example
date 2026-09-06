@@ -1,5 +1,7 @@
 # @eliware/elera-example
 
+Documentation: [docs](docs/README.md) · [specifications](specs/README.md) · [examples](examples/README.md)
+
 Runnable client example for `@eliware/elera-client`. It uses the client’s
 mysql2-compatible pool API, runs a read/write SQL probe once per second, and
 emits concise probe events.
