@@ -1,8 +1,5 @@
 # Specifications
 
-This directory contains developer-facing requirements for the example.
-
-## Contents
-
-- [Requirements](requirements.md)
-- [Out of scope](out-of-scope.md)
+- [Directive schema](directives-schema.yaml)
+- [Repository directives](directives.yaml)
+- [Workflow specifications](workflows/README.md)

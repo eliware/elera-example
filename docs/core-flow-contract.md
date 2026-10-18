@@ -1,34 +1,27 @@
-# Core-flow contract
+# Core flow contract
 
-This repository is a deliberately small end-user example, not an
-orchestration tool. It demonstrates how an application consumes Elera.
+This repository contains a small client example. It shows how an application uses Elera.
 
 ## Configuration
 
-The application requires `ELERA_API_URL` and `ELERA_API_TOKEN`. The
-optional `ELERA_DEBUG=1` flag enables local diagnostics only; it is not part of
-the Elera connection contract. The runtime token identifies the application,
-database, identity, and scopes, and this example requires read and write scope
-for its recurring probe. The app does not configure SQL credentials,
-application names, identities, nodes, or cluster settings.
+The application requires `ELERA_API_URL` and `ELERA_API_TOKEN`.
+The optional `ELERA_DEBUG=1` value turns on local diagnostics.
+The token needs read and write access for the example's recurring work.
+The application does not set SQL credentials, names, identities, nodes, or cluster options.
 
 ## Runtime behavior
 
-The example uses the public `@eliware/elera-client` package and its
-`probe` health operation, mysql2-compatible `execute` for status/schema/readback,
-and `getConnection` plus connection transaction methods for the write; these
-operations are composed into one simple read/write probe, with `end` providing
-the lifecycle method. Its telemetry is
-limited to query results, timing, observed database nodes, and errors.
-The initial probe completes before a 1000 ms recurring schedule begins. Probe
-failures are contained and emitted as `sql.error` so later probes can observe
-recovery. Shutdown is idempotent after a successful close; close failures
-propagate and do not produce a successful stop marker. The runtime is marked
-stopping before the close is attempted, so a failed close is fail-closed rather
-than retried by a later shutdown call. It may
-report probe observations, but it does not
-provision resources,
-bootstrap Galera, drain nodes, perform recovery, or invoke CLI workflows.
+The example uses the public `@eliware/elera-client` package.
+It checks client health, reads status and schema data, and writes one row in a transaction.
+It reads the row to identify the writer node.
+It starts a recurring run after the first run ends.
+A failed run emits `sql.error`, so later runs can check the state again.
+Shutdown calls `end` once and reports close errors.
 
-Routing, credentials, failover, and lifecycle events remain client internals;
-the application receives only the mysql2-compatible client surface.
+The runtime enters the stopping state before it closes the client.
+If close fails, a later shutdown call does not try again.
+The example reports query results, timing, database nodes, and errors.
+It does not create resources, bootstrap Galera, drain nodes, restore resources, or run CLI actions.
+
+Routing, credentials, failover, and lifecycle events stay inside the client package.
+The application receives the mysql2-compatible client surface.

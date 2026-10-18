@@ -1,6 +1,14 @@
 node_modules/
-dist/
+.git/
 coverage/
-.env
+dist/
+build/
+generated/
+artifacts/
+test-results/
+.env*
+!.env*.example
+.DS_Store
+Thumbs.db
 *.log
 *.tmp

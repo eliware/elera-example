@@ -1,74 +1,94 @@
-# @eliware/elera-example
+# [![eliware.org](https://eliware.org/logos/brand.png)](https://discord.gg/M6aTR9eTwN)
 
-Documentation: [docs](docs/README.md) · [specifications](specs/README.md) · [examples](examples/README.md)
+## @eliware/elera-example [![npm](https://img.shields.io/npm/v/@eliware/elera-example)](https://www.npmjs.com/package/@eliware/elera-example) [![License](https://img.shields.io/github/license/eliware/elera-example)](https://github.com/eliware/elera-example/blob/main/LICENSE) [![CI](https://github.com/eliware/elera-example/actions/workflows/ci.yaml/badge.svg)](https://github.com/eliware/elera-example/actions/workflows/ci.yaml)
 
-Runnable client example for `@eliware/elera-client`. It uses the client’s
-mysql2-compatible pool API, runs a read/write SQL probe once per second, and
-emits concise probe events.
+Runnable Elera client example for routing, telemetry, and graceful lifecycle testing
+
+## Table of Contents
+
+- [Features](#features)
+- [Requirements](#requirements)
+- [Setup](#setup)
+- [Usage](#usage)
+- [Development](#development)
+- [Testing](#testing)
+- [Troubleshooting](#troubleshooting)
+- [Security](#security)
+- [Configuration](#configuration)
+- [Operations](#operations)
+- [Commands](#commands)
+- [Exit codes](#exit-codes)
+- [Support](#support)
+- [Links](#links)
+- [License](#license)
+
+## Features
+
+Runnable Elera client example for routing, telemetry, and graceful lifecycle testing.
+
+## Requirements
+
+- Use Node.js 26 or later.
 
 ## Setup
 
-```text
-copy .env.example .env
-npm ci
-npm run build
-node dist/app.js
-```
+Run npm ci to install the locked packages.
 
-Set `ELERA_API_URL` and `ELERA_API_TOKEN` in the local environment.
-The recurring read/write probe requires a runtime token with
-`database:read` and `database:write` scope. The token must be
-application-scoped; never use a root token in this client.
-The token determines the application, database, and credential context.
-Optionally set `ELERA_DEBUG=1` for local diagnostic output; it is not an Elera
-connection setting or credential.
+## Usage
 
-The example creates and writes `sample_app.e2e_probe`. Its generated IDs and
-reported database nodes make the write path observable. It uses the client
-`probe()` operation for the health read, `execute()` for status/schema/readback
-queries, an acquired connection with begin/commit/rollback/release for the
-write transaction, and `end()` for shutdown. It exits cleanly on `SIGTERM` and
-`SIGINT`; shutdown is idempotent and ends the managed client once. If client
-shutdown fails, the error is propagated and no successful stopped marker is
-emitted. After the initial probe, a new probe is scheduled every 1000 ms while
-the process is running; probe failures are contained by the runner and emitted
-as `sql.error` events so the process can continue observing recovery.
+Run `node bin/elera-example.mjs --help` to read the command options.
+Read the [documentation index](docs/README.md) and [specification index](specs/README.md).
+Read [release notes](RELEASE_NOTES.md) for released changes.
 
-## Validation
+## Development
 
-```text
-npm test
-npm run lint
-npm run check
-npm run audit
-```
+Keep code and tests in their assigned folders.
 
-## Container
+## Testing
 
-For local development, build from the parent source directory while the client
-and shared library remain local linked dependencies. Release packaging must use
-the published client package instead:
+Run npm test for repository validation.
 
-```text
-docker build -f elera-example/Dockerfile -t elera-example elera-example/..
-docker run --rm --env-file elera-example/.env elera-example
-```
+## Troubleshooting
 
-The image runs the compiled app as the non-root `node` user. It contains no
-credentials; provide the endpoint and token at runtime.
+Read [troubleshooting](docs/troubleshooting.md) when a command fails.
+
+## Security
+
+Keep tokens, passwords, keys, and runtime data out of Git.
+
+## Configuration
+
+Set the values in .env.example when the application needs them.
 
 ## Operations
 
-This is a runnable client example, not a network service. It has no listening
-port or separate health/readiness endpoint; use the client probe output and
-process exit status for local validation. Logs are concise structured events
-written to standard output, and `ELERA_DEBUG=1` enables optional diagnostics.
+Use the repository docs for supported operations.
 
-Deployment, backups, rollback, and runtime secret management belong to the
-consuming application's environment. This repository has no Kubernetes
-deployment; its Knit validation commands are the source of truth
-for repository synchronization.
+## Commands
 
-This repository intentionally contains only the example's Dockerfile; it has no
-Kubernetes, supervisor, or GitOps configuration. Those integrations consume this
-example from their own test harnesses.
+Use elera-cli --help to read command help.
+
+## Exit codes
+
+The command returns zero when it succeeds. It returns a nonzero code when it fails.
+
+## Support
+
+For help, questions, or to chat with the author and community, visit:
+
+[![Discord](https://eliware.org/logos/discord_96.png)](https://discord.gg/M6aTR9eTwN)[![eliware.org](https://eliware.org/logos/eliware_96.png)](https://discord.gg/M6aTR9eTwN)
+
+**[eliware.org on Discord](https://discord.gg/M6aTR9eTwN)**
+
+## Links
+
+- [Home Page](https://eliware.org)
+- [GitHub Org](https://github.com/eliware)
+- [GitHub Repo](https://github.com/eliware/elera-example)
+- [Bug Reports](https://github.com/eliware/elera-example/issues)
+- [npm](https://www.npmjs.com/package/@eliware/elera-example)
+- [Discord](https://discord.gg/M6aTR9eTwN)
+
+## License
+
+[MIT © Eliware](LICENSE)
