@@ -6,19 +6,35 @@ export function createShutdown({
   db,
   emit,
 }) {
+  let stopped = false;
+  let closed = false;
+  let shutdownPromise;
   return async function shutdown() {
-    if (!isRunning()) return;
-    stop();
-    clearInterval(timer);
-    await waitForIdle();
-    try {
-      await db.end();
-    } catch (error) {
-      try {
-        emit({ event: "client.error", error: error.message, code: error.code });
-      } catch {}
-      throw error;
+    if (closed) return;
+    if (shutdownPromise) return shutdownPromise;
+    if (!stopped) {
+      if (!isRunning()) return;
+      stop();
+      clearInterval(timer);
+      stopped = true;
     }
-    emit({ event: "client.stopped", timestamp: new Date().toISOString() });
+    shutdownPromise = (async () => {
+      try {
+        await waitForIdle();
+        await db.end();
+      } catch (error) {
+        try {
+          emit({ event: "client.error", error: error.message, code: error.code });
+        } catch {}
+        throw error;
+      }
+      closed = true;
+      emit({ event: "client.stopped", timestamp: new Date().toISOString() });
+    })();
+    try {
+      await shutdownPromise;
+    } finally {
+      shutdownPromise = undefined;
+    }
   };
 }

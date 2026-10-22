@@ -1,6 +1,5 @@
 import { summarizeResult } from "../result-summary.mjs";
 export function emitSuccess({ emit, state, context, now, clock }) {
-  state.writes += 1;
   const finishedAt = now();
   emit({
     event: "sql.probe",
@@ -19,9 +18,10 @@ export function emitSuccess({ emit, state, context, now, clock }) {
     readNode: context.rows[0]?.node,
     readbackNode: context.readbackNode,
     generatedId: context.generatedId,
-    writes: state.writes,
+    writes: state.writes + 1,
     wsrepState: context.status.wsrep_local_state_comment,
     clusterStatus: context.status.wsrep_cluster_status,
   });
+  state.writes += 1;
   state.previousProbeAt = finishedAt;
 }

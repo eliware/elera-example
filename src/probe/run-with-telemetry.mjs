@@ -1,15 +1,17 @@
 export function runWithTelemetry(operation, telemetry) {
   return async function run() {
     const context = telemetry.start();
+    let result;
     try {
-      Object.assign(context, await operation());
-      telemetry.success(context);
-      return true;
+      result = await operation();
     } catch (error) {
-      try {
-        telemetry.failure(context, error);
-      } catch {}
+      telemetry.failure(context, error);
       return false;
     }
+    Object.assign(context, result);
+    try {
+      telemetry.success(context);
+    } catch {}
+    return true;
   };
 }

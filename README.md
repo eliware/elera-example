@@ -72,6 +72,7 @@ Keep `.env` out of Git.
 The application starts a check immediately, then schedules checks once each second. Use Ctrl+C to stop it and close its client.
 Build a local container with `docker build -t elera-example .`.
 Run the container with `docker run --env-file .env elera-example`.
+The Dockerfile installs production dependencies and runs the example as the `node` user.
 
 ## Commands
 

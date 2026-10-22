@@ -24,7 +24,7 @@ test("reports operation errors without rejecting", async () => {
   expect(telemetry.success).not.toHaveBeenCalled();
 });
 
-test("swallows errors from failure telemetry", async () => {
+test("propagates errors from failure telemetry", async () => {
   const error = new Error("offline");
   const telemetry = {
     start: jest.fn(() => ({})),
@@ -35,6 +35,20 @@ test("swallows errors from failure telemetry", async () => {
   };
   const operation = jest.fn().mockRejectedValue(error);
 
-  await expect(runWithTelemetry(operation, telemetry)()).resolves.toBe(false);
+  await expect(runWithTelemetry(operation, telemetry)()).rejects.toThrow("logger failed");
   expect(telemetry.failure).toHaveBeenCalledWith({}, error);
+});
+
+test("does not report a successful operation as a failure when success output fails", async () => {
+  const telemetry = {
+    start: jest.fn(() => ({})),
+    success: jest.fn(() => {
+      throw new Error("logger failed");
+    }),
+    failure: jest.fn(),
+  };
+  const operation = jest.fn().mockResolvedValue({ result: "ok" });
+
+  await expect(runWithTelemetry(operation, telemetry)()).resolves.toBe(true);
+  expect(telemetry.failure).not.toHaveBeenCalled();
 });

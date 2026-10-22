@@ -1,14 +1,32 @@
 export function emitFailure({ emit, state, context, error, now, clock }) {
   const previousProbeAt = state.previousProbeAt;
-  const finishedAt = now();
+  let finishedAt;
+  try {
+    finishedAt = now();
+    finishedAt.toISOString();
+  } catch {
+    finishedAt = new Date();
+  }
   state.previousProbeAt = finishedAt;
+  let startedAt;
+  try {
+    startedAt = context.startedAt.toISOString();
+  } catch {}
+  let durationMs;
+  try {
+    durationMs = Math.round(clock() - context.started);
+  } catch {}
+  let gapSincePreviousMs;
+  try {
+    gapSincePreviousMs = previousProbeAt ? Math.round(context.startedAt - previousProbeAt) : null;
+  } catch {}
   emit({
     event: "sql.error",
     sequence: context.sequence,
-    startedAt: context.startedAt.toISOString(),
+    startedAt,
     finishedAt: finishedAt.toISOString(),
-    durationMs: Math.round(clock() - context.started),
-    gapSincePreviousMs: previousProbeAt ? Math.round(context.startedAt - previousProbeAt) : null,
+    durationMs,
+    gapSincePreviousMs,
     error: error.message,
     code: error.code,
   });

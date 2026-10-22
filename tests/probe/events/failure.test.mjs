@@ -37,3 +37,31 @@ test("uses a null gap when no previous probe exists", () => {
   });
   expect(emit).toHaveBeenCalledWith(expect.objectContaining({ gapSincePreviousMs: null }));
 });
+
+test("emits a failure event when timing data is invalid", () => {
+  const emit = jest.fn();
+  emitFailure({
+    emit,
+    state: { previousProbeAt: new Date(1000) },
+    context: {
+      sequence: 2,
+      startedAt: {
+        toISOString: () => {
+          throw new Error("bad date");
+        },
+      },
+    },
+    error: new Error("offline"),
+    now: () => ({
+      toISOString: () => {
+        throw new Error("bad date");
+      },
+    }),
+    clock: () => {
+      throw new Error("clock failed");
+    },
+  });
+  expect(emit).toHaveBeenCalledWith(
+    expect.objectContaining({ event: "sql.error", startedAt: undefined, durationMs: undefined }),
+  );
+});
