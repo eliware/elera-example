@@ -39,3 +39,20 @@ test("propagates connection acquisition errors", async () => {
   await expect(writeProbe(db)).rejects.toBe(error);
   expect(db.getConnection).toHaveBeenCalledTimes(1);
 });
+
+test("preserves the write error when rollback fails", async () => {
+  const error = new Error("write failed");
+  const connection = {
+    beginTransaction: jest.fn(),
+    commit: jest.fn(),
+    rollback: jest.fn().mockRejectedValue(new Error("rollback failed")),
+    release: jest.fn(),
+    execute: jest.fn().mockRejectedValue(error),
+  };
+
+  await expect(writeProbe({ getConnection: jest.fn().mockResolvedValue(connection) })).rejects.toBe(
+    error,
+  );
+  expect(connection.rollback).toHaveBeenCalledTimes(1);
+  expect(connection.release).toHaveBeenCalledTimes(1);
+});

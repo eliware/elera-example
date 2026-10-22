@@ -9,7 +9,11 @@ export async function writeProbe(db) {
     await connection.commit();
     return result.insertId;
   } catch (error) {
-    if (connection) await connection.rollback();
+    if (connection) {
+      try {
+        await connection.rollback();
+      } catch {}
+    }
     throw error;
   } finally {
     connection?.release();

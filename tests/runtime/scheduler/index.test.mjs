@@ -10,11 +10,19 @@ test("does not overlap scheduled probes", async () => {
         finishProbe = resolve;
       }),
   );
-  const timer = startProbeSchedule(() => true, probe, jest.fn(), 50);
+  const { timer, waitForIdle } = startProbeSchedule(() => true, probe, jest.fn(), 50);
+  await waitForIdle();
   await jest.advanceTimersByTimeAsync(50);
   await jest.advanceTimersByTimeAsync(100);
   expect(probe).toHaveBeenCalledTimes(1);
+  let idle = false;
+  const idleResult = waitForIdle().then(() => {
+    idle = true;
+  });
+  await Promise.resolve();
+  expect(idle).toBe(false);
   finishProbe();
+  await idleResult;
   await Promise.resolve();
   await jest.advanceTimersByTimeAsync(50);
   clearInterval(timer);

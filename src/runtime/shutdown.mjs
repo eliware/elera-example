@@ -1,8 +1,16 @@
-export function createShutdown({ isRunning, stop, timer, db, emit }) {
+export function createShutdown({
+  isRunning,
+  stop,
+  timer,
+  waitForIdle = () => Promise.resolve(),
+  db,
+  emit,
+}) {
   return async function shutdown() {
     if (!isRunning()) return;
     stop();
     clearInterval(timer);
+    await waitForIdle();
     try {
       await db.end();
     } catch (error) {

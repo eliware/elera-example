@@ -43,3 +43,38 @@ test("reports close errors and does not emit a stopped marker", async () => {
   });
   expect(emit).not.toHaveBeenCalledWith(expect.objectContaining({ event: "client.stopped" }));
 });
+
+test("waits for an active probe before closing the client", async () => {
+  let finishProbe;
+  let probeFinished = false;
+  const waitForIdle = jest.fn(
+    () =>
+      new Promise((resolve) => {
+        finishProbe = () => {
+          probeFinished = true;
+          resolve();
+        };
+      }),
+  );
+  const db = {
+    end: jest.fn(() => {
+      expect(probeFinished).toBe(true);
+      return Promise.resolve();
+    }),
+  };
+  const shutdown = createShutdown({
+    isRunning: () => true,
+    stop: jest.fn(),
+    timer: 3,
+    waitForIdle,
+    db,
+    emit: jest.fn(),
+  });
+
+  const shutdownResult = shutdown();
+  await Promise.resolve();
+  expect(db.end).not.toHaveBeenCalled();
+  finishProbe();
+  await shutdownResult;
+  expect(db.end).toHaveBeenCalledTimes(1);
+});

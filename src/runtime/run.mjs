@@ -22,13 +22,14 @@ export async function runExample(
     }
     throw error;
   }
-  const timer = scheduleExample({ running: () => running, probe, emit });
+  const { timer, waitForIdle } = scheduleExample({ running: () => running, probe, emit });
   return createShutdown({
     isRunning: () => running,
     stop: () => {
       running = false;
     },
     timer,
+    waitForIdle,
     db,
     emit,
   });

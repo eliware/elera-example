@@ -44,8 +44,8 @@ sharing them because error text can contain operational details.
 
 ## Stop the application
 
-Use Ctrl+C or send SIGTERM to stop the application. The shutdown handler stops the schedule and
-closes the Elera client.
+Use Ctrl+C or send SIGTERM to stop the application. The shutdown handler stops the schedule, waits
+for any active check, and closes the Elera client.
 
 ## Run in a container
 
