@@ -47,7 +47,7 @@ Read [AGENTS.md](AGENTS.md) for repository development rules.
 
 ## Testing
 
-Run `npm test` for aggregate validation. The command runs tests, lint, format, audit, and package checks.
+Run `npm test` for aggregate validation.
 
 ## Troubleshooting
 
@@ -69,7 +69,7 @@ Keep `.env` out of Git.
 
 ## Operations
 
-The application starts a check immediately and schedules one each second. Use Ctrl+C to stop it and close its client.
+The application starts a check immediately, then schedules checks once each second. Use Ctrl+C to stop it and close its client.
 Build a local container with `docker build -t elera-example .`.
 Run the container with `docker run --env-file .env elera-example`.
 
@@ -78,12 +78,13 @@ Run the container with `docker run --env-file .env elera-example`.
 Run `node bin/elera-example.mjs --help` to print help.
 Run `node bin/elera-example.mjs --version` to print the package version.
 Run the command without options to start the example.
+For any other argument, the command prints an error and exits with code 2.
 
 ## Exit codes
 
 Help and version commands return zero.
 The application returns a nonzero code when configuration or startup fails.
-The application returns zero after SIGINT or SIGTERM completes shutdown.
+SIGINT and SIGTERM return code zero after shutdown completes.
 
 ## Support
 

@@ -1,11 +1,22 @@
 import { expect, jest, test } from "@jest/globals";
 import { startProbeSchedule } from "../../../src/runtime/scheduler/index.mjs";
 
-test("starts a scheduler that invokes the probe repeatedly while active", () => {
+test("does not overlap scheduled probes", async () => {
   jest.useFakeTimers();
-  const probe = jest.fn();
-  const timer = startProbeSchedule(() => true, probe, 50);
-  jest.advanceTimersByTime(100);
+  let finishProbe;
+  const probe = jest.fn(
+    () =>
+      new Promise((resolve) => {
+        finishProbe = resolve;
+      }),
+  );
+  const timer = startProbeSchedule(() => true, probe, jest.fn(), 50);
+  await jest.advanceTimersByTimeAsync(50);
+  await jest.advanceTimersByTimeAsync(100);
+  expect(probe).toHaveBeenCalledTimes(1);
+  finishProbe();
+  await Promise.resolve();
+  await jest.advanceTimersByTimeAsync(50);
   clearInterval(timer);
   jest.useRealTimers();
   expect(probe).toHaveBeenCalledTimes(2);

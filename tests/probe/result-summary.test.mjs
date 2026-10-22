@@ -10,3 +10,13 @@ test("summarizes a mysql tuple result", () => {
     fieldCount: 1,
   });
 });
+
+test("summarizes malformed results without throwing", () => {
+  expect(summarizeResult(null)).toEqual({
+    mysql2Tuple: false,
+    rowsPresent: false,
+    fieldsPresent: false,
+    rowCount: 0,
+    fieldCount: 0,
+  });
+});

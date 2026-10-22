@@ -26,6 +26,8 @@ environment before you start the application.
 Run `node --env-file=.env bin/elera-example.mjs` from the repository root. The first database
 check starts immediately. The application schedules a check every second.
 
+If the first check fails, the application closes the client and exits with a nonzero status.
+
 Each check reads client health and Galera status. It creates `e2e_probe` if needed, inserts a row
 inside a transaction, and reads the row to report its writer node. The application does not remove
 the table or its rows. Repeated runs add rows to the table.
@@ -59,6 +61,7 @@ Dockerfile and does not provide a Compose file.
 Run `node bin/elera-example.mjs --help` to print usage. Run
 `node bin/elera-example.mjs --version` to print the package version. These commands do not require
 the Elera endpoint or token.
+For any other argument, the command prints an error and exits with code 2.
 
 ## Validate a checkout
 

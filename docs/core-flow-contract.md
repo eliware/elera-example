@@ -15,7 +15,7 @@ It checks client health, reads status and schema data, and writes one row in a t
 It reads the row to identify the writer node.
 It starts a recurring run after the first run ends.
 A failed run emits `sql.error`, so later runs can check the state again.
-Shutdown calls `end` once and reports close errors.
+Shutdown calls `end` once and emits `client.error` if closing the client fails.
 
 The runtime enters the stopping state before it closes the client.
 If close fails, a later shutdown call does not try again.

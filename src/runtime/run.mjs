@@ -9,8 +9,20 @@ export async function runExample(
 ) {
   const db = await createExampleClient(configuration, dependencies.createDb);
   let running = true;
-  const probe = await startExample({ db, emit });
-  const timer = scheduleExample({ running: () => running, probe });
+  let probe;
+  try {
+    probe = await startExample({ db, emit });
+  } catch (error) {
+    try {
+      await db.end();
+    } catch (closeError) {
+      try {
+        emit({ event: "client.error", error: closeError.message, code: closeError.code });
+      } catch {}
+    }
+    throw error;
+  }
+  const timer = scheduleExample({ running: () => running, probe, emit });
   return createShutdown({
     isRunning: () => running,
     stop: () => {

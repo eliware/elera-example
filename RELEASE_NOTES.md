@@ -10,3 +10,5 @@
 - Run the Docker image directly from source with published runtime dependencies.
 - Document environment setup, recurring probes, shutdown, and container use.
 - Remove `ELERA_DEBUG` because it had no runtime effect.
+- Reject unknown CLI arguments before the application starts.
+- Stop startup if the first database check fails and report client close errors.

@@ -1,6 +1,7 @@
 export async function writeProbe(db) {
-  const connection = await db.getConnection();
+  let connection;
   try {
+    connection = await db.getConnection();
     await connection.beginTransaction();
     const [result] = await connection.execute(
       "INSERT INTO e2e_probe (touched_at, writer_node) SELECT NOW(6), @@hostname",
@@ -8,9 +9,9 @@ export async function writeProbe(db) {
     await connection.commit();
     return result.insertId;
   } catch (error) {
-    await connection.rollback();
+    if (connection) await connection.rollback();
     throw error;
   } finally {
-    connection.release();
+    connection?.release();
   }
 }

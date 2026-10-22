@@ -4,8 +4,12 @@ export function runWithTelemetry(operation, telemetry) {
     try {
       Object.assign(context, await operation());
       telemetry.success(context);
+      return true;
     } catch (error) {
-      telemetry.failure(context, error);
+      try {
+        telemetry.failure(context, error);
+      } catch {}
+      return false;
     }
   };
 }

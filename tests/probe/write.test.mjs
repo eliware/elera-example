@@ -31,3 +31,11 @@ test("rolls back and releases when the write fails", async () => {
   expect(connection.rollback).toHaveBeenCalledTimes(1);
   expect(connection.release).toHaveBeenCalledTimes(1);
 });
+
+test("propagates connection acquisition errors", async () => {
+  const error = new Error("connection unavailable");
+  const db = { getConnection: jest.fn().mockRejectedValue(error) };
+
+  await expect(writeProbe(db)).rejects.toBe(error);
+  expect(db.getConnection).toHaveBeenCalledTimes(1);
+});
