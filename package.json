@@ -100,8 +100,7 @@
     "apply": [
       "general",
       "application",
-      "cli",
-      "npm-published"
+      "cli"
     ]
   }
 }

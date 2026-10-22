@@ -1,6 +1,6 @@
 # [![eliware.org](https://eliware.org/logos/brand.png)](https://discord.gg/M6aTR9eTwN)
 
-## @eliware/elera-example [![npm](https://img.shields.io/npm/v/@eliware/elera-example)](https://www.npmjs.com/package/@eliware/elera-example) [![License](https://img.shields.io/github/license/eliware/elera-example)](https://github.com/eliware/elera-example/blob/main/LICENSE) [![CI](https://github.com/eliware/elera-example/actions/workflows/ci.yaml/badge.svg)](https://github.com/eliware/elera-example/actions/workflows/ci.yaml)
+## @eliware/elera-example [![License](https://img.shields.io/github/license/eliware/elera-example)](https://github.com/eliware/elera-example/blob/main/LICENSE) [![CI](https://github.com/eliware/elera-example/actions/workflows/ci.yaml/badge.svg)](https://github.com/eliware/elera-example/actions/workflows/ci.yaml)
 
 Runnable Elera client example for routing, telemetry, and graceful lifecycle testing
 
@@ -86,7 +86,6 @@ For help, questions, or to chat with the author and community, visit:
 - [GitHub Org](https://github.com/eliware)
 - [GitHub Repo](https://github.com/eliware/elera-example)
 - [Bug Reports](https://github.com/eliware/elera-example/issues)
-- [npm](https://www.npmjs.com/package/@eliware/elera-example)
 - [Discord](https://discord.gg/M6aTR9eTwN)
 
 ## License
