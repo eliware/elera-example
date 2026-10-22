@@ -17,16 +17,17 @@ test("writes in a transaction and releases the connection", async () => {
 });
 
 test("rolls back and releases when the write fails", async () => {
+  const error = Object.assign(new Error("write failed"), { code: "EWRITE" });
   const connection = {
     beginTransaction: jest.fn(),
     commit: jest.fn(),
     rollback: jest.fn(),
     release: jest.fn(),
-    execute: jest.fn().mockRejectedValue(new Error("write failed")),
+    execute: jest.fn().mockRejectedValue(error),
   };
-  await expect(
-    writeProbe({ getConnection: jest.fn().mockResolvedValue(connection) }),
-  ).rejects.toThrow("write failed");
+  await expect(writeProbe({ getConnection: jest.fn().mockResolvedValue(connection) })).rejects.toBe(
+    error,
+  );
   expect(connection.rollback).toHaveBeenCalledTimes(1);
   expect(connection.release).toHaveBeenCalledTimes(1);
 });

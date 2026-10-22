@@ -1,28 +1,32 @@
 import { expect, jest, test } from "@jest/globals";
-import { readProbe } from "../../src/probe/queries.mjs";
 
-test("composes health, status, schema, write, and readback operations", async () => {
-  const connection = {
-    beginTransaction: jest.fn(),
-    commit: jest.fn(),
-    rollback: jest.fn(),
-    release: jest.fn(),
-    execute: jest.fn().mockResolvedValue([{ insertId: 3 }]),
+const readHealthQuery = jest.fn();
+const runDatabaseOperations = jest.fn();
+
+await jest.unstable_mockModule("../../src/probe/health-query.mjs", () => ({ readHealthQuery }));
+await jest.unstable_mockModule("../../src/probe/database-operations.mjs", () => ({
+  runDatabaseOperations,
+}));
+
+const { readProbe } = await import("../../src/probe/queries.mjs");
+
+test("combines client health with database operations", async () => {
+  const db = {};
+  const health = {
+    clientProbe: { result: [[{ node: "reader" }], []] },
+    rows: [{ node: "reader" }],
   };
-  const db = {
-    probe: jest.fn().mockResolvedValue({ result: [[{ node: "r" }], []] }),
-    execute: jest
-      .fn()
-      .mockResolvedValueOnce([[{ Variable_name: "wsrep_cluster_status", Value: "Primary" }]])
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([[{ writer_node: "w" }]]),
-    getConnection: jest.fn().mockResolvedValue(connection),
-  };
-  await expect(readProbe(db)).resolves.toEqual(
-    expect.objectContaining({
-      generatedId: 3,
-      readbackNode: "w",
-      status: { wsrep_cluster_status: "Primary" },
-    }),
+  const databaseOperations = { status: { wsrep_cluster_status: "Primary" }, generatedId: 3 };
+  readHealthQuery.mockResolvedValue(health);
+  runDatabaseOperations.mockResolvedValue(databaseOperations);
+
+  await expect(readProbe(db)).resolves.toEqual({
+    ...health,
+    ...databaseOperations,
+  });
+  expect(readHealthQuery).toHaveBeenCalledWith(db);
+  expect(runDatabaseOperations).toHaveBeenCalledWith(db);
+  expect(readHealthQuery.mock.invocationCallOrder[0]).toBeLessThan(
+    runDatabaseOperations.mock.invocationCallOrder[0],
   );
 });

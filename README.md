@@ -24,16 +24,15 @@ Runnable Elera client example for routing, telemetry, and graceful lifecycle tes
 
 ## Features
 
-Runnable Elera client example for routing, telemetry, and graceful lifecycle testing.
+The example checks Elera routing, cluster status, database writes, telemetry, and shutdown.
 
 ## Requirements
 
-Use Node.js 26 or later and npm 12 or later.
+Use Node.js 26 or later.
 
 ## Setup
 
 Run `npm ci` from the repository root to install the locked packages.
-Copy `.env.example` to `.env`. Set `ELERA_API_URL` and `ELERA_API_TOKEN` in `.env`.
 
 ## Usage
 
@@ -44,7 +43,7 @@ Read [release notes](RELEASE_NOTES.md) for release history.
 
 ## Development
 
-Read [AGENTS.md](AGENTS.md) before you change files. Keep code and tests in their assigned folders.
+Read [AGENTS.md](AGENTS.md) for repository development rules.
 
 ## Testing
 
@@ -60,13 +59,17 @@ Keep tokens, passwords, keys, and runtime data out of Git.
 
 ## Configuration
 
-Set `ELERA_API_URL` to the Elera endpoint. Set `ELERA_API_TOKEN` to a token with read and write access.
 Copy `.env.example` to `.env` and load it with `node --env-file=.env`.
 Keep `.env` out of Git.
 
+| Variable          | Required | Default | Example                     |
+| ----------------- | -------- | ------- | --------------------------- |
+| `ELERA_API_URL`   | Yes      | None    | `http://127.0.0.1:8088`     |
+| `ELERA_API_TOKEN` | Yes      | None    | `replace-with-scoped-token` |
+
 ## Operations
 
-The application checks client health and database access once each second. Use Ctrl+C to stop it and close its client.
+The application starts a check immediately and schedules one each second. Use Ctrl+C to stop it and close its client.
 Build a local container with `docker build -t elera-example .`.
 Run the container with `docker run --env-file .env elera-example`.
 

@@ -22,7 +22,7 @@ test("assembles the runtime dependencies", async () => {
   );
 });
 
-test("uses default output and client dependencies", async () => {
+test("uses default output and shuts down after a scheduled run", async () => {
   const db = {
     probe: jest.fn().mockRejectedValue(new Error("offline")),
     end: jest.fn().mockResolvedValue(undefined),
@@ -33,7 +33,7 @@ test("uses default output and client dependencies", async () => {
   const shutdown = await runExample({ url: "http://router", token: "token" });
   await jest.advanceTimersByTimeAsync(1000);
   await shutdown();
-  expect(createDb).toHaveBeenCalledWith({ endpoint: "http://router", token: "token" });
+  expect(log).toHaveBeenCalledWith(expect.objectContaining({ event: "client.started" }));
   expect(db.end).toHaveBeenCalledTimes(1);
   jest.useRealTimers();
   log.mockRestore();

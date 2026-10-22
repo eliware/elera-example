@@ -15,11 +15,12 @@ Keep runtime code in `src/`, tests in `tests/`, docs in `docs/`, and specificati
 
 ## Development
 
-Give each source module one purpose. Keep source files under 100 lines. Keep test files under 200 lines.
+Give each source and test module one cohesive purpose and one cause for change.
+Limit each source module to 150 physical lines and each test module to 300 physical lines.
 
 ## Validation
 
-Use Node.js 26 or later and npm 12 or later.
+Use Node.js 26 or later.
 
 Run `npm test` for aggregate validation.
 Run `npm run lint` for lint checks.
@@ -38,7 +39,7 @@ Keep docs current. Follow the shared repository rules.
 
 ## Application
 
-Keep application code under `src/`. Keep launchers under `bin/`. Keep app settings out of source files.
+Keep application code under `src/`. Keep launchers under `bin/`.
 
 Run focused tests first during development.
 Run one test file with `npm test -- tests/path/to/example.test.mjs`.
