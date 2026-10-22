@@ -27,7 +27,3 @@ jobs:
       - run: npm -g install npm@latest
       - run: npm ci
       - run: npm test
-      - run: npm run lint
-      - run: npm run audit
-      - run: npm run format:check
-      - run: npm run pack

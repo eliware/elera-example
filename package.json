@@ -1,6 +1,6 @@
 {
   "name": "@eliware/elera-example",
-  "version": "13.0.0",
+  "version": "15.0.0",
   "type": "module",
   "description": "Runnable Elera client example for routing, telemetry, and graceful lifecycle testing",
   "keywords": [
@@ -12,11 +12,7 @@
     "telemetry",
     "example"
   ],
-  "private": false,
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
+  "private": true,
   "bin": {
     "elera-example": "./bin/elera-example.mjs"
   },
@@ -28,7 +24,6 @@
     "LICENSE",
     "RELEASE_NOTES.md",
     "bin/",
-    "specs/",
     ".env.example"
   ],
   "scripts": {
@@ -43,11 +38,11 @@
     "node": ">=26"
   },
   "dependencies": {
-    "@eliware/common": "^12.0.1",
-    "@eliware/elera-client": "^12.0.0"
+    "@eliware/common": "^15.0.0",
+    "@eliware/elera-client": "^15.0.0"
   },
   "devDependencies": {
-    "@eliware/test": "^12.0.0"
+    "@eliware/test": "^15.0.0"
   },
   "jest": {
     "testEnvironment": "node",

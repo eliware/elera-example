@@ -28,25 +28,27 @@ Runnable Elera client example for routing, telemetry, and graceful lifecycle tes
 
 ## Requirements
 
-- Use Node.js 26 or later.
+Use Node.js 26 or later and npm 12 or later.
 
 ## Setup
 
-Run npm ci to install the locked packages.
+Run `npm ci` from the repository root to install the locked packages.
+Copy `.env.example` to `.env`. Set `ELERA_API_URL` and `ELERA_API_TOKEN` in `.env`.
 
 ## Usage
 
-Run `node bin/elera-example.mjs --help` to read the command options.
-Read the [documentation index](docs/README.md) and [specification index](specs/README.md).
-Read [release notes](RELEASE_NOTES.md) for released changes.
+Run `node --env-file=.env bin/elera-example.mjs` from the repository root.
+Run `node bin/elera-example.mjs --help` to print command help.
+Read the [documentation index](docs/README.md) and [specifications index](specs/README.md).
+Read [release notes](RELEASE_NOTES.md) for release history.
 
 ## Development
 
-Keep code and tests in their assigned folders.
+Read [AGENTS.md](AGENTS.md) before you change files. Keep code and tests in their assigned folders.
 
 ## Testing
 
-Run npm test for repository validation.
+Run `npm test` for aggregate validation. The command runs tests, lint, format, audit, and package checks.
 
 ## Troubleshooting
 
@@ -58,19 +60,27 @@ Keep tokens, passwords, keys, and runtime data out of Git.
 
 ## Configuration
 
-Set the values in .env.example when the application needs them.
+Set `ELERA_API_URL` to the Elera endpoint. Set `ELERA_API_TOKEN` to a token with read and write access.
+Copy `.env.example` to `.env` and load it with `node --env-file=.env`.
+Keep `.env` out of Git.
 
 ## Operations
 
-Use the repository docs for supported operations.
+The application checks client health and database access once each second. Use Ctrl+C to stop it and close its client.
+Build a local container with `docker build -t elera-example .`.
+Run the container with `docker run --env-file .env elera-example`.
 
 ## Commands
 
-Use elera-cli --help to read command help.
+Run `node bin/elera-example.mjs --help` to print help.
+Run `node bin/elera-example.mjs --version` to print the package version.
+Run the command without options to start the example.
 
 ## Exit codes
 
-The command returns zero when it succeeds. It returns a nonzero code when it fails.
+Help and version commands return zero.
+The application returns a nonzero code when configuration or startup fails.
+The application returns zero after SIGINT or SIGTERM completes shutdown.
 
 ## Support
 

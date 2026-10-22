@@ -6,28 +6,23 @@ test("reads the documented endpoint and token contract", () => {
     readConfiguration({
       ELERA_API_URL: "http://router",
       ELERA_API_TOKEN: "token",
-      ELERA_DEBUG: "1",
     }),
-  ).toEqual({ url: "http://router", token: "token", debug: true });
+  ).toEqual({ url: "http://router", token: "token" });
 });
 
-test("reads the process environment and defaults diagnostics to off", () => {
+test("reads the process environment", () => {
   const endpoint = process.env.ELERA_API_URL;
   const token = process.env.ELERA_API_TOKEN;
-  const debug = process.env.ELERA_DEBUG;
   process.env.ELERA_API_URL = "http://router";
   process.env.ELERA_API_TOKEN = "token";
-  delete process.env.ELERA_DEBUG;
 
   try {
-    expect(readConfiguration()).toEqual({ url: "http://router", token: "token", debug: false });
+    expect(readConfiguration()).toEqual({ url: "http://router", token: "token" });
   } finally {
     if (endpoint === undefined) delete process.env.ELERA_API_URL;
     else process.env.ELERA_API_URL = endpoint;
     if (token === undefined) delete process.env.ELERA_API_TOKEN;
     else process.env.ELERA_API_TOKEN = token;
-    if (debug === undefined) delete process.env.ELERA_DEBUG;
-    else process.env.ELERA_DEBUG = debug;
   }
 });
 

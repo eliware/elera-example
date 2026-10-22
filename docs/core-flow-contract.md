@@ -5,7 +5,6 @@ This repository contains a small client example. It shows how an application use
 ## Configuration
 
 The application requires `ELERA_API_URL` and `ELERA_API_TOKEN`.
-The optional `ELERA_DEBUG=1` value turns on local diagnostics.
 The token needs read and write access for the example's recurring work.
 The application does not set SQL credentials, names, identities, nodes, or cluster options.
 
